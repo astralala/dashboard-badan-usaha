@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Footer from './Footer';
 
 const AdminLayout = ({ children, currentPage, setCurrentPage }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  //Hide sidebar by default on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+    handleResize(); // Initial check  
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
